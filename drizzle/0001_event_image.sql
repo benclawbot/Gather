@@ -1,0 +1,1 @@
+ALTER TABLE events ADD COLUMN image_key TEXT NOT NULL DEFAULT '';

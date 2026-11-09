@@ -1,0 +1,12 @@
+import { readFileSync, writeFileSync, mkdirSync, copyFileSync, rmSync } from 'node:fs';
+import { resolve } from 'node:path';
+const root = process.cwd();
+const html = readFileSync(resolve(root, 'src/index.html'), 'utf8');
+const worker = readFileSync(resolve(root, 'worker/index.js'), 'utf8').replace('__HTML__', JSON.stringify(html));
+const out = resolve(root, 'dist');
+rmSync(out, { recursive: true, force: true });
+mkdirSync(resolve(out, 'server'), { recursive: true });
+mkdirSync(resolve(out, '.openai'), { recursive: true });
+writeFileSync(resolve(out, 'server/index.js'), worker);
+copyFileSync(resolve(root, '.openai/hosting.json'), resolve(out, '.openai/hosting.json'));
+console.log('Built D1-backed Gather Site');
